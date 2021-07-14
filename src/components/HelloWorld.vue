@@ -61,7 +61,6 @@ export default {
     this.canvas = markRaw(new fabric.Canvas('c'))
     this.canvas.on('object:moving', e  => {
       let p = e.target;
-      console.log(p)
       if(e.startLine){
         let x = p.left - e.startLine.x2
         let y = p.top - e.startLine.y2
@@ -84,7 +83,10 @@ export default {
         stroke: 'lightgreen',
         strokeWidth: 4,
       });
-
+      console.log(123123)
+      rect.on('event:selected', e => {
+        console.log(11111)
+      })
       this.canvas.add(rect);
       this.canvas.setActiveObject(rect);
     },
@@ -112,8 +114,8 @@ export default {
       });
 
       this.canvas.add(line);
-      this.canvas.add(this.makeTriangle(line.get('x1'), line.get('y1'), line))
-      this.canvas.add(this.makeCircle(line.get('x2'), line.get('y2'), line))
+      this.canvas.add(this.makeCircle(line.get('x1'), line.get('y1'), line))
+      this.canvas.add(this.makeCircle(line.get('x2'), line.get('y2'), null, line))
     },
 
     renderIcon(icon) {
@@ -144,22 +146,22 @@ export default {
       })
     },
 
-    makeTriangle(left, top, line) {
-      let lineTriangle = new fabric.Triangle({
-        left: left,
-        top: top,
-        width: 10,
-        height: 10,
-        angle: 90,
-        fill: '#ddd',
-        stroke: '#ccc'
-      });
-      lineTriangle.hasControls = lineTriangle.hasBorders = false;
-      lineTriangle.startLine = line;
-      return lineTriangle;
-    },
+    // makeTriangle(left, top, line) {
+    //   let lineTriangle = new fabric.Triangle({
+    //     left: left,
+    //     top: top,
+    //     width: 10,
+    //     height: 10,
+    //     angle: 90,
+    //     fill: '#ddd',
+    //     stroke: '#ccc'
+    //   });
+    //   lineTriangle.hasControls = lineTriangle.hasBorders = false;
+    //   lineTriangle.startLine = line;
+    //   return lineTriangle;
+    // },
 
-    makeCircle(left, top, line) {
+    makeCircle(left, top, line1, line2) {
       let lineCircle = new fabric.Circle({
         left: left,
         top: top,
@@ -169,7 +171,8 @@ export default {
         stroke: '#ccc'
       });
       lineCircle.hasControls = lineCircle.hasBorders = false;
-      lineCircle.endLine = line;
+      lineCircle.startLine = line1;
+      lineCircle.endLine = line2;
       return lineCircle;
     },
   }
