@@ -1,7 +1,10 @@
 <template>
+  <button @click="addEllipse">圆</button>
   <div id="svg">
-    <svg style="width: 100%;height: 1000px">
-      <ellipse v-for="(item, index) in ellipse" :key="index" v-bind="item" @mouseover="item.mouseover(item)" @mouseleave="item.mouseleave"/>
+    <svg style="width: 100%;height: 800px;background-color: #dcdcdc;">
+      <g v-for="(item, index) in ellipse" :key="index" >
+        <ellipse v-bind="item" @mouseover="item.mouseover(item)" @mouseleave="item.mouseleave" v-drag="item"/>
+      </g>
       <g>
         <g v-for="(item,index) in around" :key="index">
           <image :x="item.x" :y="item.y" :width="item.width" :height="item.height" :xlink:href="imageUrl" preserveAspectRatio="none"></image>
@@ -19,14 +22,16 @@ export default {
     drag: {
       mounted(el,binding){
         const value = binding.value
-        el.onmousedown = e => {
+        el.onmousedown = () => {
           el.onmousemove = e => {
+            binding.instance.around = []
             value.cx = e.clientX - binding.instance.offsetX
             value.cy = e.clientY - binding.instance.offsetY
 					};
-          el.onmouseup = e => {
-						el.onmousemove=null;
-						el.onmouseup=null;
+          el.onmouseup = () => {
+						el.onmousemove = null
+						el.onmouseup = null
+            binding.instance.around = binding.instance.getAroundPostion(value)
 					};
           return false
 				}
@@ -35,33 +40,11 @@ export default {
   },
   data(){
     return {
-      ellipse: [{
-        cx: 300,
-        cy: 80,
-        rx: 100,
-        ry: 50,
-        style: "fill:yellow;stroke:purple;stroke-width:2",
-        mouseover: self => {
-          const top = [self.cx, self.cy - self.ry]
-          const left = [self.cx - self.rx, self.cy]
-          const right = [self.cx, self.cy + self.ry]
-          const bottom = [self.cx + self.rx, self.cy]
-          const around = [top,left,right,bottom]
-          this.around = around.map(item => {
-            item.x = item[0] - 3
-            item.y = item[1] - 3
-            item.width = 8
-            item.height = 8
-            return item
-          })
-        },
-        mouseleave: () => {
-          this.around = []
-        }
-      }],
+      ellipse: [],
       offsetX: 0,
       offsetY: 0,
       around: [],
+      aroundBak: [],
       imageUrl
     }
   },
@@ -71,7 +54,34 @@ export default {
     this.offsetY = svg.offsetTop
   },
   methods: {
-    xx(){
+    getAroundPostion(svg){
+      const top = [svg.cx, svg.cy - svg.ry]
+      const left = [svg.cx - svg.rx, svg.cy]
+      const right = [svg.cx, svg.cy + svg.ry]
+      const bottom = [svg.cx + svg.rx, svg.cy]
+      const around = [top,left,right,bottom]
+      return around.map(item => {
+        item.x = item[0] - 4
+        item.y = item[1] - 4
+        item.width = 8
+        item.height = 8
+        return item
+      })
+    },
+    addEllipse(){
+      this.ellipse.push({
+        cx: 300,
+        cy: 300,
+        rx: 50,
+        ry: 50,
+        style: "fill:white;stroke:#555555;stroke-width:1;cursor: move;",
+        mouseover: self => {
+          this.around = this.getAroundPostion(self)
+        },
+        mouseleave: () => {
+          this.around = []
+        }
+      })
     }
   }
 }
