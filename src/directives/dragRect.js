@@ -5,12 +5,12 @@ export const dragRect = {
       let disX = e.clientX - value.x
       let disY = e.clientY - value.y
       function mousemove(e){
-        binding.instance.around = []
+        binding.instance.cross = []
         value.x = e.clientX - disX
         value.y = e.clientY - disY
       }
       function mouseup(){
-        binding.instance.around = value.getAround()
+        binding.instance.cross = value.getCross()
         document.removeEventListener('mousemove', mousemove)
         document.removeEventListener('mouseup', mouseup)
       }

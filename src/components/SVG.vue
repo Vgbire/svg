@@ -5,17 +5,22 @@
   <div id="svg">
     <svg style="width: 100%;height: 800px;background-color: #dcdcdc;">
       <g v-for="(item, index) in ellipse" :key="index">
-        <ellipse v-bind="item" @mouseover="item.mouseover(around)" @mouseleave="item.mouseleave(around)" v-drag-ellipse="item"/>
+        <ellipse v-bind="item" @mouseover="item.mouseover(cross)" @mouseleave="item.mouseleave(cross)" v-drag-ellipse="item"/>
       </g>
       <g v-for="(item, index) in rect" :key="index">
-        <rect v-bind="item" @mouseover="item.mouseover(around)" @mouseleave="item.mouseleave(around)" v-drag-rect="item"/>
+        <rect v-bind="item" @mouseover="item.mouseover(cross)" @mouseleave="item.mouseleave(cross)" v-drag-rect="item"/>
       </g>
       <g v-for="(item, index) in path" :key="index">
         <path v-bind="item" v-drag-path="item"/>
       </g>
       <g>
-        <g v-for="(item,index) in around" :key="index">
-          <image :x="item.x" :y="item.y" :width="item.width" :height="item.height" :xlink:href="imageUrl" preserveAspectRatio="none"></image>
+        <g v-for="(item,index) in dot" :key="index">
+          <image :x="item.x" :y="item.y" :width="item.width" :height="item.height" :xlink:href="dotUrl" preserveAspectRatio="none"></image>
+        </g>
+      </g>
+      <g>
+        <g v-for="(item,index) in cross" :key="index">
+          <image :x="item.x" :y="item.y" :width="item.width" :height="item.height" :xlink:href="xUrl" preserveAspectRatio="none"></image>
         </g>
       </g>
     </svg>
@@ -23,7 +28,7 @@
 </template>
 
 <script>
-import { imageUrl } from './base64.js'
+import { xUrl, dotUrl } from './base64.js'
 import { dragEllipse } from '@/directives/dragEllipse.js'
 import { dragRect } from '@/directives/dragRect.js'
 import { dragPath } from '@/directives/dragPath.js'
@@ -44,8 +49,10 @@ export default {
       path: [],
       offsetX: 0,
       offsetY: 0,
-      around: [],
-      imageUrl
+      dot: [],
+      cross: [],
+      xUrl,
+      dotUrl
     }
   },
   mounted(){

@@ -9,14 +9,14 @@ export default class Ellipse {
     this['stroke-width'] = config['stroke-width']
     this.cursor = config.cursor 
   }
-  getAround(){
+  getCross(){
     const { cx, cy, rx, ry } = this
     const top = [cx, cy - ry]
       const left = [cx - rx, cy]
       const right = [cx, cy + ry]
       const bottom = [cx + rx, cy]
-      const around = [top,left,right,bottom]
-      return around.map(item => {
+      const cross = [top,left,right,bottom]
+      return cross.map(item => {
         const result = {}
         result.x = item[0] - 4
         result.y = item[1] - 4
@@ -25,11 +25,11 @@ export default class Ellipse {
         return result
       })
   }
-  mouseover(around){
-    around.push(...this.getAround())
+  mouseover(cross){
+    cross.push(...this.getCross())
   }
-  mouseleave(around){
-    const l = around.length
-    around.splice(0, l)
+  mouseleave(cross){
+    const l = cross.length
+    cross.splice(0, l)
   }
 }

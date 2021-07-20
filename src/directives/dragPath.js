@@ -9,7 +9,7 @@ export const dragPath = {
       let points
       function mousemove(e){
         points = cloneDeep(value.points)
-        binding.instance.around = []
+        binding.instance.cross = []
         let x = e.clientX - disX
         let y = e.clientY - disY
         points = points.map(item => {
@@ -21,7 +21,7 @@ export const dragPath = {
       }
       function mouseup(){
         points && (value.__proto__.points = points)
-        // binding.instance.around = value.getAround()
+        // binding.instance.cross = value.getCross()
         document.removeEventListener('mousemove', mousemove)
         document.removeEventListener('mouseup', mouseup)
       }

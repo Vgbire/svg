@@ -3,12 +3,12 @@ export const dragEllipse = {
     const value = binding.value
     el.onmousedown = () => {
       function mousemove(e){
-        binding.instance.around = []
+        binding.instance.cross = []
         value.cx = e.clientX - binding.instance.offsetX
         value.cy = e.clientY - binding.instance.offsetY
       }
       function mouseup(){
-        binding.instance.around = value.getAround(value)
+        binding.instance.cross = value.getCross(value)
         document.removeEventListener('mousemove', mousemove)
         document.removeEventListener('mouseup', mouseup)
       }

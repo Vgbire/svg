@@ -11,7 +11,7 @@ export default class Rect {
     this['stroke-width'] = config['stroke-width'],
     this.cursor = config.cursor
   }
-  getAround(){
+  getCross(){
     const { x, y, width, height } = this
     const leftTop = [x, y]
     const top = [x + width / 2, y]
@@ -21,8 +21,8 @@ export default class Rect {
     const leftBottom = [x, y + height]
     const bottom = [x + width / 2, y + height]
     const rightBottom = [x + width, y + height]
-    const around = [leftTop, top, rightTop, left, right, leftBottom, bottom, rightBottom]
-    return around.map(item => {
+    const cross = [leftTop, top, rightTop, left, right, leftBottom, bottom, rightBottom]
+    return cross.map(item => {
       const result = {}
       result.x = item[0] - 4
       result.y = item[1] - 4
@@ -31,11 +31,11 @@ export default class Rect {
       return result
     })
   }
-  mouseover(around){
-    around.push(...this.getAround())
+  mouseover(cross){
+    cross.push(...this.getCross())
   }
-  mouseleave(around){
-    const l = around.length
-    around.splice(0, l)
+  mouseleave(cross){
+    const l = cross.length
+    cross.splice(0, l)
   }
 }
