@@ -11,7 +11,7 @@
         <rect v-bind="item" @mouseover="item.mouseover(around)" @mouseleave="item.mouseleave(around)" v-drag-rect="item"/>
       </g>
       <g v-for="(item, index) in path" :key="index">
-        <path v-bind="item"/>
+        <path v-bind="item" v-drag-path="item"/>
       </g>
       <g>
         <g v-for="(item,index) in around" :key="index">
@@ -82,8 +82,10 @@ export default {
     },
     addPath(){
       this.path.push(new Path({
-        d: 'M 100 100 L 200 200',
-        stroke: '#000'
+        points: [[100,100],[200,200]],
+        stroke: '#000',
+        'stroke-width': 2,
+        cursor: 'move',
       }))
     }
   }

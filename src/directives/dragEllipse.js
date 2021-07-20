@@ -7,7 +7,7 @@ export const dragEllipse = {
         value.cx = e.clientX - binding.instance.offsetX
         value.cy = e.clientY - binding.instance.offsetY
       }
-      function mouseup(e){
+      function mouseup(){
         binding.instance.around = value.getAround(value)
         document.removeEventListener('mousemove', mousemove)
         document.removeEventListener('mouseup', mouseup)

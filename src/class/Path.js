@@ -1,6 +1,14 @@
 export default class Path {
   constructor(config){
-    this.d = config.d
-    this.stroke = config.stroke
+    this.__proto__.points =  config.points
+    this.d = this.computedD(this.points)
+    this.stroke = config.stroke,
+    this['stroke-width'] = config['stroke-width']
+    this.cursor = config.cursor
+  }
+  computedD(points){
+    return "M" + points.map(item => {
+      return item.join(" ")
+    }).join("L")
   }
 }
