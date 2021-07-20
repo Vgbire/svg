@@ -21,7 +21,6 @@ export const dragPath = {
       }
       function mouseup(){
         points && (value.__proto__.points = points)
-        // binding.instance.cross = value.getCross()
         document.removeEventListener('mousemove', mousemove)
         document.removeEventListener('mouseup', mouseup)
       }

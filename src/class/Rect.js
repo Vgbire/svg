@@ -10,6 +10,8 @@ export default class Rect {
     this.stroke = config.stroke,
     this['stroke-width'] = config['stroke-width'],
     this.cursor = config.cursor
+    this.dot = config.dot
+    this.cross = config.cross
   }
   getCross(){
     const { x, y, width, height } = this
@@ -31,11 +33,35 @@ export default class Rect {
       }
     })
   }
-  mouseover(cross){
-    cross.push(...this.getCross())
+  getDot(){
+    const { x, y, width, height } = this
+    const leftTop = [x, y]
+    const top = [x + width / 2, y]
+    const rightTop = [x + width, y]
+    const left = [x, y + height / 2]
+    const right = [x + width, y + height / 2]
+    const leftBottom = [x, y + height]
+    const bottom = [x + width / 2, y + height]
+    const rightBottom = [x + width, y + height]
+    const dot = [leftTop, top, rightTop, left, right, leftBottom, bottom, rightBottom]
+    return dot.map(item => {
+      return {
+        x: item[0] - 9,
+        y: item[1] - 9,
+        width: 18,
+        height: 18
+      }
+    })
+  }
+  click(){
+    this.dot.push(...this.getDot())
+  }
+  mouseover(){
+    this.cross.push(...this.getCross())
+    console.log(this.cross)
   }
   mouseleave(cross){
-    const l = cross.length
-    cross.splice(0, l)
+    const l = this.cross.length
+    this.cross.splice(0, l)
   }
 }

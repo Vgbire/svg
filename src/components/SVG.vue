@@ -3,12 +3,12 @@
   <button @click="addRect">矩形</button>
   <button @click="addPath">线</button>
   <div id="svg">
-    <svg style="width: 100%;height: 800px;background-color: #dcdcdc;">
+    <svg class="svg-container" @click="clearDot">
       <g v-for="(item, index) in ellipse" :key="index">
-        <ellipse v-bind="item" @mouseover="item.mouseover(cross)" @mouseleave="item.mouseleave(cross)" v-drag-ellipse="item"/>
+        <ellipse v-bind="item" @click.stop="item.click()" @mouseover="item.mouseover()" @mouseleave="item.mouseleave()" v-drag-ellipse="item"/>
       </g>
       <g v-for="(item, index) in rect" :key="index">
-        <rect v-bind="item" @mouseover="item.mouseover(cross)" @mouseleave="item.mouseleave(cross)" v-drag-rect="item"/>
+        <rect v-bind="item" @click.stop="item.click()" @mouseover="item.mouseover()" @mouseleave="item.mouseleave()" v-drag-rect="item"/>
       </g>
       <g v-for="(item, index) in path" :key="index">
         <path v-bind="item" v-drag-path="item"/>
@@ -70,7 +70,9 @@ export default {
         fill: 'white',
         stroke: '#555',
         'stroke-width': 1,
-        cursor: 'move'
+        cursor: 'move',
+        dot: this.dot,
+        cross: this.cross
       }))
     },
     addRect(){
@@ -85,6 +87,8 @@ export default {
         stroke: '#555',
         'stroke-width': 1,
         cursor: 'move',
+        dot: this.dot,
+        cross: this.cross
       }))
     },
     addPath(){
@@ -93,12 +97,22 @@ export default {
         stroke: '#000',
         'stroke-width': 2,
         cursor: 'move',
+        dot: this.dot,
+        cross: this.cross
       }))
+    },
+    clearDot(){
+      this.dot = []
     }
   }
 }
 </script>
 
-<style>
-
+<style lang='scss' scoped>
+.svg-container {
+ width: 80%;
+ height: 800px;
+ border: 1px solid #dcdcdc;
+ margin: 50px;
+}
 </style>
