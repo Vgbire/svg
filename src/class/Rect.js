@@ -23,12 +23,12 @@ export default class Rect {
     const rightBottom = [x + width, y + height]
     const cross = [leftTop, top, rightTop, left, right, leftBottom, bottom, rightBottom]
     return cross.map(item => {
-      const result = {}
-      result.x = item[0] - 4
-      result.y = item[1] - 4
-      result.width = 8
-      result.height = 8
-      return result
+      return {
+        x: item[0] - 4,
+        y: item[1] - 4,
+        width: 8,
+        height: 8
+      }
     })
   }
   mouseover(cross){

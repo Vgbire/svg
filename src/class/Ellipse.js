@@ -12,18 +12,18 @@ export default class Ellipse {
   getCross(){
     const { cx, cy, rx, ry } = this
     const top = [cx, cy - ry]
-      const left = [cx - rx, cy]
-      const right = [cx, cy + ry]
-      const bottom = [cx + rx, cy]
-      const cross = [top,left,right,bottom]
-      return cross.map(item => {
-        const result = {}
-        result.x = item[0] - 4
-        result.y = item[1] - 4
-        result.width = 8
-        result.height = 8
-        return result
-      })
+    const left = [cx - rx, cy]
+    const right = [cx, cy + ry]
+    const bottom = [cx + rx, cy]
+    const cross = [top,left,right,bottom]
+    return cross.map(item => {
+      return {
+        x: item[0] - 4,
+        y: item[1] - 4,
+        width: 8,
+        height: 8
+      }
+    })
   }
   mouseover(cross){
     cross.push(...this.getCross())
