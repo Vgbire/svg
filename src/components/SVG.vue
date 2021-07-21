@@ -5,13 +5,13 @@
   <div id="svg">
     <svg class="svg-container" @click="clearDot">
       <g v-for="(item, index) in ellipse" :key="index">
-        <ellipse v-bind="item" @click.stop="item.click()" @mouseover="item.mouseover()" @mouseleave="item.mouseleave()" v-drag-ellipse="item"/>
+        <ellipse v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-ellipse="item"/>
       </g>
       <g v-for="(item, index) in rect" :key="index">
-        <rect v-bind="item" @click.stop="item.click()" @mouseover="item.mouseover()" @mouseleave="item.mouseleave()" v-drag-rect="item"/>
+        <rect v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-rect="item"/>
       </g>
       <g v-for="(item, index) in path" :key="index">
-        <path v-bind="item" v-drag-path="item"/>
+        <path v-bind="item" @click.stop="click(item)" v-drag-path="item"/>
       </g>
       <g>
         <g v-for="(item,index) in dot" :key="index">
@@ -103,6 +103,16 @@ export default {
     },
     clearDot(){
       this.dot = []
+    },
+    click(svg){
+      this.dot = svg.getDot()
+      this.cross = []
+    },
+    mouseover(svg){
+      if(!this.dot.length) this.cross = svg.getCross()
+    },
+    mouseleave(){
+      this.cross = []
     }
   }
 }

@@ -53,15 +53,4 @@ export default class Rect {
       }
     })
   }
-  click(){
-    this.dot.push(...this.getDot())
-  }
-  mouseover(){
-    this.cross.push(...this.getCross())
-    console.log(this.cross)
-  }
-  mouseleave(cross){
-    const l = this.cross.length
-    this.cross.splice(0, l)
-  }
 }
