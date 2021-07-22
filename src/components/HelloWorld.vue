@@ -83,9 +83,7 @@ export default {
         stroke: 'lightgreen',
         strokeWidth: 4,
       });
-      console.log(123123)
       rect.on('event:selected', e => {
-        console.log(11111)
       })
       this.canvas.add(rect);
       this.canvas.setActiveObject(rect);

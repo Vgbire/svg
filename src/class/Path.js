@@ -16,12 +16,15 @@ export default class Path {
     const start = cloneDeep(this.points[0])
     const end = cloneDeep(this.points[1])
     const dot = [start, end]
-    return dot.map(item => {
+    return dot.map((item,index) => {
       return {
         x: item[0] - 9,
         y: item[1] - 9,
         width: 18,
-        height: 18
+        height: 18,
+        index: index,
+        type: 'path',
+        instance: this
       }
     })
   }

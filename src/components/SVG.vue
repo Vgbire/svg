@@ -14,13 +14,13 @@
         <path v-bind="item" @click.stop="click(item)" v-drag-path="item"/>
       </g>
       <g>
-        <g v-for="(item,index) in dot" :key="index">
-          <image :x="item.x" :y="item.y" :width="item.width" :height="item.height" :xlink:href="dotUrl" preserveAspectRatio="none"></image>
+        <g v-for="(item,index) in dot" :key="index+key">
+          <image v-bind="item" @click.stop :xlink:href="dotUrl" v-drag-dot="item"></image>
         </g>
       </g>
       <g>
         <g v-for="(item,index) in cross" :key="index">
-          <image :x="item.x" :y="item.y" :width="item.width" :height="item.height" :xlink:href="xUrl" preserveAspectRatio="none"></image>
+          <image v-bind="item" :xlink:href="xUrl"></image>
         </g>
       </g>
     </svg>
@@ -32,6 +32,7 @@ import { xUrl, dotUrl } from './base64.js'
 import { dragEllipse } from '@/directives/dragEllipse.js'
 import { dragRect } from '@/directives/dragRect.js'
 import { dragPath } from '@/directives/dragPath.js'
+import { dragDot } from '@/directives/dragDot.js'
 import Ellipse from '@/class/Ellipse.js'
 import Rect from '@/class/Rect.js'
 import Path from '@/class/Path.js'
@@ -40,7 +41,8 @@ export default {
   directives: {
     dragEllipse,
     dragRect,
-    dragPath
+    dragPath,
+    dragDot
   },
   data(){
     return {
@@ -52,7 +54,8 @@ export default {
       dot: [],
       cross: [],
       xUrl,
-      dotUrl
+      dotUrl,
+      key: 0
     }
   },
   mounted(){
@@ -60,6 +63,7 @@ export default {
     this.offsetX = svg.offsetLeft
     this.offsetY = svg.offsetTop
   },
+  watch: {},
   methods: {
     addEllipse(){
       this.ellipse.push(new Ellipse({
@@ -106,10 +110,11 @@ export default {
     },
     click(svg){
       this.dot = svg.getDot()
+      this.key += 100
       this.cross = []
     },
     mouseover(svg){
-      if(!this.dot.length) this.cross = svg.getCross()
+      this.cross = svg.getCross()
     },
     mouseleave(){
       this.cross = []
