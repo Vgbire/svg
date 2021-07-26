@@ -8,19 +8,20 @@
         <ellipse v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-ellipse="item"/>
       </g>
       <g v-for="(item, index) in rect" :key="index">
-        <rect v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-rect="item"/>
+        <rect v-bind="item" @click.stop="click(item)" @mouseenter="mouseover(item)" @mouseleave="mouseleave" v-drag-rect="item"/>
       </g>
       <g v-for="(item, index) in path" :key="index">
         <path v-bind="item" @click.stop="click(item)" v-drag-path="item"/>
       </g>
       <g>
         <g v-for="(item,index) in dot" :key="index+key">
-          <image v-bind="item" @click.stop :xlink:href="dotUrl" v-drag-dot="item"></image>
+          <ellipse v-if="item.type === 'ellipse'"  v-bind="item" fill-opacity="0.3" stroke-opacity="0.3"></ellipse>
+          <image v-else v-bind="item" @click.stop :xlink:href="dotUrl" v-drag-dot="item"></image>
         </g>
       </g>
       <g>
         <g v-for="(item,index) in cross" :key="index">
-          <image v-bind="item" :xlink:href="xUrl"></image>
+          <image v-bind="item" :xlink:href="xUrl" @mouseover="crossMouseover(item)" @mouseleave="crossMouseleave"></image>
         </g>
       </g>
     </svg>
@@ -55,7 +56,8 @@ export default {
       cross: [],
       xUrl,
       dotUrl,
-      key: 0
+      key: 0,
+      dotmouseleave: true
     }
   },
   mounted(){
@@ -112,6 +114,24 @@ export default {
       this.cross = svg.getCross()
     },
     mouseleave(){
+      setTimeout(()=>{
+        if(this.dotmouseleave) this.cross = []
+      })
+    }, 
+    crossMouseover(svg){
+      this.dotmouseleave = false
+      this.dot.push(new Ellipse({
+        cx: svg.x + 4,
+        cy: svg.y + 4,
+        rx: 8,
+        ry: 8,
+        fill: '#00ff00',
+        stroke: '#00ff00',
+      }))
+    },
+    crossMouseleave(){
+      this.dotmouseleave = true
+      this.dot.pop()
       this.cross = []
     }
   }

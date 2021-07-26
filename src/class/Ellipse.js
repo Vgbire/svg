@@ -1,5 +1,6 @@
 export default class Ellipse {
   constructor(config){
+    this.type = 'ellipse'
     this.cx = config.cx
     this.cy = config.cy
     this.rx = config.rx
