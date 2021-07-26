@@ -5,6 +5,7 @@ export default class Path {
     this.d = this.computedD(this.points)
     this.stroke = config.stroke,
     this['stroke-width'] = config['stroke-width']
+    this['stroke-dasharray'] = config['stroke-dasharray']
     this.cursor = config.cursor
   }
   computedD(points){

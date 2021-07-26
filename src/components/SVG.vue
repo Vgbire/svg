@@ -75,8 +75,6 @@ export default {
         stroke: '#555',
         'stroke-width': 1,
         cursor: 'move',
-        dot: this.dot,
-        cross: this.cross
       }))
     },
     addRect(){
@@ -91,18 +89,15 @@ export default {
         stroke: '#555',
         'stroke-width': 1,
         cursor: 'move',
-        dot: this.dot,
-        cross: this.cross
       }))
     },
     addPath(){
       this.path.push(new Path({
         points: [[100,100],[200,200]],
         stroke: '#000',
-        'stroke-width': 2,
         cursor: 'move',
-        dot: this.dot,
-        cross: this.cross
+        'stroke-width': 2,
+        'stroke-dasharray': '3,3'
       }))
     },
     clearDot(){

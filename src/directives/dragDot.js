@@ -7,8 +7,8 @@ export const dragDot = {
       function mousemove(e){
         const x = e.clientX - disX
         const y = e.clientY - disY
-        value.x = x
-        value.y = y
+        // value.x = x
+        // value.y = y
         const instance = value.instance
         instance.points[value.index][0] = x + 9
         instance.points[value.index][1] = y + 9
