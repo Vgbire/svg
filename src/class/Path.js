@@ -1,12 +1,14 @@
 import { cloneDeep } from "lodash-es"
 export default class Path {
   constructor(config){
-    this.__proto__.points =  config.points
-    this.d = this.computedD(this.points)
-    this.stroke = config.stroke,
-    this['stroke-width'] = config['stroke-width']
-    this['stroke-dasharray'] = config['stroke-dasharray']
-    this.cursor = config.cursor
+    this.type = 'path'
+    this.points =  config.points
+
+    this.attrs.d = this.computedD(this.points)
+    this.attrs.stroke = config.stroke,
+    this.attrs.cursor = config.cursor
+    this.attrs['stroke-width'] = config['stroke-width']
+    this.attrs['stroke-dasharray'] = config['stroke-dasharray']
   }
   computedD(points){
     return "M" + points.map(item => {

@@ -8,20 +8,20 @@
         <ellipse v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-ellipse="item"/>
       </g>
       <g v-for="(item, index) in rect" :key="index">
-        <rect v-bind="item" @click.stop="click(item)" @mouseenter="mouseover(item)" @mouseleave="mouseleave" v-drag-rect="item"/>
+        <rect v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-rect="item"/>
       </g>
       <g v-for="(item, index) in path" :key="index">
         <path v-bind="item" @click.stop="click(item)" v-drag-path="item"/>
       </g>
       <g>
         <g v-for="(item,index) in dot" :key="index+key">
-          <ellipse v-if="item.type === 'ellipse'"  v-bind="item" fill-opacity="0.3" stroke-opacity="0.3"></ellipse>
+          <ellipse v-if="item.type === 'ellipse'" v-bind="item" fill-opacity="0.3" stroke-opacity="0.3"></ellipse>
           <image v-else v-bind="item" @click.stop :xlink:href="dotUrl" v-drag-dot="item"></image>
         </g>
       </g>
       <g>
         <g v-for="(item,index) in cross" :key="index">
-          <image v-bind="item" :xlink:href="xUrl" @mouseover="crossMouseover(item)" @mouseleave="crossMouseleave"></image>
+          <image v-bind="item" :xlink:href="xUrl" @mouseover="crossMouseover(item)" @mouseleave="crossMouseleave" @mousemove="mousemove(item)"></image>
         </g>
       </g>
     </svg>
@@ -50,8 +50,6 @@ export default {
       ellipse: [],
       rect: [],
       path: [],
-      offsetX: 0,
-      offsetY: 0,
       dot: [],
       cross: [],
       xUrl,
@@ -60,10 +58,10 @@ export default {
       dotmouseleave: true
     }
   },
-  mounted(){
-    const svg = document.querySelector('#svg')
-    this.offsetX = svg.offsetLeft
-    this.offsetY = svg.offsetTop
+  computed: {
+    currentPath(){
+      return this.$store.getters.currentPath
+    }
   },
   watch: {},
   methods: {
@@ -98,7 +96,7 @@ export default {
         points: [[100,100],[200,200]],
         stroke: '#000',
         cursor: 'move',
-        'stroke-width': 2,
+        'stroke-width': 4,
         'stroke-dasharray': '3,3'
       }))
     },
@@ -133,6 +131,11 @@ export default {
       this.dotmouseleave = true
       this.dot.pop()
       this.cross = []
+    },
+    mousemove(item){
+      this.currentPath.points[1][0] = item.x + 9
+      this.currentPath.points[1][1] = item.y + 9
+      this.currentPath.d = this.currentPath.computedD(this.currentPath.points)
     }
   }
 }
