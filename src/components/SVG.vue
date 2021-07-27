@@ -5,23 +5,23 @@
   <div id="svg">
     <svg class="svg-container" @click="clearDot">
       <g v-for="(item, index) in ellipse" :key="index">
-        <ellipse v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-ellipse="item"/>
+        <ellipse v-bind="item.attrs" @click="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-ellipse="item"/>
       </g>
       <g v-for="(item, index) in rect" :key="index">
-        <rect v-bind="item" @click.stop="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-rect="item"/>
+        <rect v-bind="item.attrs" @click="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-rect="item"/>
       </g>
       <g v-for="(item, index) in path" :key="index">
-        <path v-bind="item" @click.stop="click(item)" v-drag-path="item"/>
+        <path v-bind="item.attrs" @click="click(item)" v-drag-path="item"/>
       </g>
       <g>
         <g v-for="(item,index) in dot" :key="index+key">
-          <ellipse v-if="item.type === 'ellipse'" v-bind="item" fill-opacity="0.3" stroke-opacity="0.3"></ellipse>
-          <image v-else v-bind="item" @click.stop :xlink:href="dotUrl" v-drag-dot="item"></image>
+          <ellipse v-if="item.type === 'ellipse'" v-bind="item"></ellipse>
+          <image v-else v-bind="item.attrs" v-drag-dot="item"></image>
         </g>
       </g>
       <g>
         <g v-for="(item,index) in cross" :key="index">
-          <image v-bind="item" :xlink:href="xUrl" @mouseover="crossMouseover(item)" @mouseleave="crossMouseleave" @mousemove="mousemove(item)"></image>
+          <image v-bind="item.attrs" @mouseover="crossMouseover(item)" @mouseleave="crossMouseleave" @mousemove="mousemove(item)"></image>
         </g>
       </g>
     </svg>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { xUrl, dotUrl } from './base64.js'
+import { mapGetters } from 'vuex'
 import { dragEllipse } from '@/directives/dragEllipse.js'
 import { dragRect } from '@/directives/dragRect.js'
 import { dragPath } from '@/directives/dragPath.js'
@@ -52,16 +52,12 @@ export default {
       path: [],
       dot: [],
       cross: [],
-      xUrl,
-      dotUrl,
       key: 0,
       dotmouseleave: true
     }
   },
   computed: {
-    currentPath(){
-      return this.$store.getters.currentPath
-    }
+    ...mapGetters(['activeSVG','hoverSVG'])
   },
   watch: {},
   methods: {
@@ -100,15 +96,17 @@ export default {
         'stroke-dasharray': '3,3'
       }))
     },
-    clearDot(){
-      this.dot = []
+    clearDot(e){
+      if(e.target.className.baseVal === 'svg-container') this.dot = []
     },
     click(svg){
+      this.$store.commit('setActiveSVG', svg)
       this.dot = svg.getDot()
-      this.key += 100
       this.cross = []
+      this.key += 100
     },
     mouseover(svg){
+      this.$store.commit('setHoverSVG', svg)
       this.cross = svg.getCross()
     },
     mouseleave(){
@@ -132,10 +130,10 @@ export default {
       this.dot.pop()
       this.cross = []
     },
-    mousemove(item){
-      this.currentPath.points[1][0] = item.x + 9
-      this.currentPath.points[1][1] = item.y + 9
-      this.currentPath.d = this.currentPath.computedD(this.currentPath.points)
+    mousemove(svg){
+      this.activeSVG.points[1][0] = svg.x + 9
+      this.activeSVG.points[1][1] = svg.y + 9
+      this.activeSVG.d = this.activeSVG.computedD(this.activeSVG.points)
     }
   }
 }

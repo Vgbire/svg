@@ -2,14 +2,35 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    currentPath: {}
+    activeSVG: {},
+    hoverSVG: {},
+    // dot: [],
+    // cross: []
   },
   getters: {
-    currentPath: state => state.currentPath
+    activeSVG: state => state.activeSVG,
+    hoverSVG: state => state.hoverSVG,
+    // dot: state => state.dot,
+    // cross: state => state.cross
   },
   mutations: {
-    setCurrentPath(state, currentPath){
-      state.currentPath = currentPath
-    }
+    setActiveSVG(state, activeSVG){
+      state.activeSVG = activeSVG
+    },
+    setHoverSVG(state, hoverSVG){
+      state.hoverSVG = hoverSVG
+    },
+    // setDot(state, dot){
+    //   state.dot = dot
+    // },
+    // dotPush(state, dot){
+    //   state.dot.push(dot)
+    // },
+    // dotPop(state){
+    //   state.dot.pop()
+    // },
+    // setCross(state, cross){
+    //   state.cross = cross
+    // }
   }
 })

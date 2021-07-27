@@ -1,20 +1,23 @@
+import store from '@/store'
+
 export const dragDot = {
   mounted(el, binding){
     const value = binding.value
+    const attrs = value.attrs
     el.onmousedown = e => {
-      const disX = e.clientX - value.x
-      const disY = e.clientY - value.y
+      const disX = e.clientX - attrs.x
+      const disY = e.clientY - attrs.y
       function mousemove(e){
         const x = e.clientX - disX
         const y = e.clientY - disY
-        const instance = value.instance
-        instance.points[value.index][0] = x + 9
-        instance.points[value.index][1] = y + 9
-        instance.d = instance.computedD(instance.points)
-        binding.instance.$store.commit('setCurrentPath', instance)
+        const activeSVG = store.getters.activeSVG
+        activeSVG.points[attrs.index][0] = x + 9
+        activeSVG.points[attrs.index][1] = y + 9
+        activeSVG.d = activeSVG.computedD(activeSVG.points)
+        // store.commit('setActiveSVG', activeSVG)
       }
       function mouseup(){
-        binding.instance.$store.commit('setCurrentPath', {})
+        // store.commit('setActiveSVG', {})
         document.removeEventListener('mousemove', mousemove)
         document.removeEventListener('mouseup', mouseup)
       }

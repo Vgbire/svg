@@ -3,6 +3,7 @@ import { cloneDeep } from "lodash-es"
 export const dragPath = {
   mounted(el, binding){
     const value = binding.value
+    const attrs = value.attrs
     el.onmousedown = e => {
       let disX = e.clientX
       let disY = e.clientY
@@ -17,7 +18,7 @@ export const dragPath = {
           item[1] += y
           return item
         })
-        value.d = value.computedD(points)
+        attrs.d = value.computedD(points)
       }
       function mouseup(){
         binding.instance.dot = value.getDot()

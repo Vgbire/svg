@@ -1,14 +1,17 @@
+import { bind } from "lodash-es"
+
 export const dragEllipse = {
   mounted(el, binding){
     const value = binding.value
+    const attrs = value.attrs
     el.onmousedown = e => {
-      let disX = e.clientX - value.cx
-      let disY = e.clientY - value.cy
+      let disX = e.clientX - attrs.cx
+      let disY = e.clientY - attrs.cy
       function mousemove(e){
         binding.instance.dot = []
         binding.instance.cross = []
-        value.cx = e.clientX - disX
-        value.cy = e.clientY - disY
+        attrs.cx = e.clientX - disX
+        attrs.cy = e.clientY - disY
       }
       function mouseup(){
         binding.instance.dot = value.getDot()
