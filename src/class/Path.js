@@ -4,7 +4,7 @@ export default class Path {
   constructor(config){
     this.type = 'path'
     this.points =  config.points
-
+    
     delete config.points
     this.attrs = config
     this.attrs.d = this.computedD(this.points)

@@ -15,7 +15,7 @@
       </g>
       <g>
         <g v-for="(item,index) in dot" :key="index+key">
-          <ellipse v-if="item.type === 'ellipse'" v-bind="item"></ellipse>
+          <ellipse v-if="item.type === 'ellipse'" v-bind="item.attrs"></ellipse>
           <image v-else v-bind="item.attrs" v-drag-dot="item"></image>
         </g>
       </g>
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import { dragEllipse } from '@/directives/dragEllipse.js'
 import { dragRect } from '@/directives/dragRect.js'
 import { dragPath } from '@/directives/dragPath.js'
@@ -37,6 +36,7 @@ import { dragDot } from '@/directives/dragDot.js'
 import Ellipse from '@/class/Ellipse.js'
 import Rect from '@/class/Rect.js'
 import Path from '@/class/Path.js'
+import { activeSVG, hoverSVG, dot, cross } from '@/reactive.js'
 
 export default {
   directives: {
@@ -45,21 +45,18 @@ export default {
     dragPath,
     dragDot
   },
+  setup(){
+    return { activeSVG, hoverSVG, dot, cross }
+  },
   data(){
     return {
       ellipse: [],
       rect: [],
       path: [],
-      dot: [],
-      cross: [],
       key: 0,
       dotmouseleave: true
     }
   },
-  computed: {
-    ...mapGetters(['activeSVG','hoverSVG'])
-  },
-  watch: {},
   methods: {
     addEllipse(){
       this.ellipse.push(new Ellipse({
@@ -92,21 +89,26 @@ export default {
         points: [[100,100],[200,200]],
         stroke: '#000',
         cursor: 'move',
-        'stroke-width': 4,
+        'stroke-width': 10,
         'stroke-dasharray': '3,3'
       }))
     },
     clearDot(e){
-      if(e.target.className.baseVal === 'svg-container') this.dot = []
+      if(e.target.className.baseVal === 'svg-container') {
+        // this.activeSVG = {}
+        this.dot = []
+      }
     },
     click(svg){
-      this.$store.commit('setActiveSVG', svg)
+      if(svg.type === 'path'){
+        this.activeSVG = svg
+      }
       this.dot = svg.getDot()
       this.cross = []
       this.key += 100
     },
     mouseover(svg){
-      this.$store.commit('setHoverSVG', svg)
+      this.hoverSVG = svg
       this.cross = svg.getCross()
     },
     mouseleave(){
@@ -116,13 +118,16 @@ export default {
     }, 
     crossMouseover(svg){
       this.dotmouseleave = false
+      const attrs = svg.attrs
       this.dot.push(new Ellipse({
-        cx: svg.x + 4,
-        cy: svg.y + 4,
+        cx: attrs.x + 4,
+        cy: attrs.y + 4,
         rx: 8,
         ry: 8,
         fill: '#00ff00',
         stroke: '#00ff00',
+        'fill-opacity': '0.3',
+        'stroke-opacity': '0.3'
       }))
     },
     crossMouseleave(){
@@ -131,9 +136,10 @@ export default {
       this.cross = []
     },
     mousemove(svg){
-      this.activeSVG.points[1][0] = svg.x + 9
-      this.activeSVG.points[1][1] = svg.y + 9
-      this.activeSVG.d = this.activeSVG.computedD(this.activeSVG.points)
+      const attrs = svg.attrs
+      this.activeSVG.points[1][0] = attrs.x + 9
+      this.activeSVG.points[1][1] = attrs.y + 9
+      this.activeSVG.attrs.d = this.activeSVG.computedD(this.activeSVG.points)
     }
   }
 }

@@ -1,4 +1,4 @@
-import store from '@/store'
+import { activeSVG } from '@/reactive.js'
 
 export const dragDot = {
   mounted(el, binding){
@@ -10,14 +10,11 @@ export const dragDot = {
       function mousemove(e){
         const x = e.clientX - disX
         const y = e.clientY - disY
-        const activeSVG = store.getters.activeSVG
-        activeSVG.points[attrs.index][0] = x + 9
-        activeSVG.points[attrs.index][1] = y + 9
-        activeSVG.d = activeSVG.computedD(activeSVG.points)
-        // store.commit('setActiveSVG', activeSVG)
+        activeSVG.value.points[value.position][0] = x + 9
+        activeSVG.value.points[value.position][1] = y + 9
+        activeSVG.value.attrs.d = activeSVG.value.computedD(activeSVG.value.points)
       }
       function mouseup(){
-        // store.commit('setActiveSVG', {})
         document.removeEventListener('mousemove', mousemove)
         document.removeEventListener('mouseup', mouseup)
       }

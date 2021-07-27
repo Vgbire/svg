@@ -2,8 +2,9 @@ import Image from './Image.js'
 export default class Rect {
   constructor(config){
     this.type = 'rect'
-
     this.attrs = config
+
+    this.line = {}
   }
   getCross(){
     return this.computedPosition().map((item,index) => {
