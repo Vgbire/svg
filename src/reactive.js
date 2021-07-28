@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 
-export const activeSVG = ref(null)
-export const hoverSVG = ref(null)
-export const dot = ref([])
-export const cross = ref([])
+export let activeSVG = ref(null)
+export let hoverSVG = ref(null)
+export let hoverCorss = ref(null)
+export let dot = ref([])
+export let cross = ref([])

@@ -3,7 +3,7 @@
   <button @click="addRect">矩形</button>
   <button @click="addPath">线</button>
   <div id="svg">
-    <svg class="svg-container" @click="clearDot">
+    <svg class="svg-container" @mousedown="clearDot">
       <g v-for="(item, index) in ellipse" :key="index">
         <ellipse v-bind="item.attrs" @click="click(item)" @mouseover="mouseover(item)" @mouseleave="mouseleave" v-drag-ellipse="item"/>
       </g>
@@ -21,7 +21,7 @@
       </g>
       <g>
         <g v-for="(item,index) in cross" :key="index">
-          <image v-bind="item.attrs" @mouseover="crossMouseover(item)" @mouseleave="crossMouseleave" @mousemove="mousemove(item)"></image>
+          <image v-bind="item.attrs" @mouseover="crossMouseover(item)" @mouseleave="crossMouseleave" @mousemove="crossMousemove(item)"></image>
         </g>
       </g>
     </svg>
@@ -36,7 +36,7 @@ import { dragDot } from '@/directives/dragDot.js'
 import Ellipse from '@/class/Ellipse.js'
 import Rect from '@/class/Rect.js'
 import Path from '@/class/Path.js'
-import { activeSVG, hoverSVG, dot, cross } from '@/reactive.js'
+import { activeSVG, hoverSVG, hoverCorss, dot, cross } from '@/reactive.js'
 
 export default {
   directives: {
@@ -95,7 +95,7 @@ export default {
     },
     clearDot(e){
       if(e.target.className.baseVal === 'svg-container') {
-        // this.activeSVG = {}
+        this.activeSVG = null
         this.dot = []
       }
     },
@@ -110,14 +110,20 @@ export default {
     mouseover(svg){
       this.hoverSVG = svg
       this.cross = svg.getCross()
+      if(this.hoverSVG) this.hoverSVG.attrs['pointer-events'] = 'none'
     },
     mouseleave(){
+      if(this.hoverSVG) delete this.hoverSVG.attrs['pointer-events']
       setTimeout(()=>{
-        if(this.dotmouseleave) this.cross = []
+        if(this.dotmouseleave) {
+          this.cross = []
+          this.hoverSVG = null
+        }
       })
     }, 
     crossMouseover(svg){
       this.dotmouseleave = false
+      this.hoverCorss = svg
       const attrs = svg.attrs
       this.dot.push(new Ellipse({
         cx: attrs.x + 4,
@@ -133,13 +139,13 @@ export default {
     crossMouseleave(){
       this.dotmouseleave = true
       this.dot.pop()
-      this.cross = []
+      this.hoverCorss = null
     },
-    mousemove(svg){
-      const attrs = svg.attrs
-      this.activeSVG.points[1][0] = attrs.x + 9
-      this.activeSVG.points[1][1] = attrs.y + 9
-      this.activeSVG.attrs.d = this.activeSVG.computedD(this.activeSVG.points)
+    crossMousemove(svg){
+      // const attrs = svg.attrs
+      // this.activeSVG.points[1][0] = attrs.x + 9
+      // this.activeSVG.points[1][1] = attrs.y + 9
+      // this.activeSVG.attrs.d = this.activeSVG.computedD(this.activeSVG.points)
     }
   }
 }

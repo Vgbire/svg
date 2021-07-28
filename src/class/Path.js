@@ -1,7 +1,10 @@
 import { cloneDeep } from "lodash-es"
 import Image from './Image.js'
+
+let id = 0
 export default class Path {
   constructor(config){
+    this.id = id++
     this.type = 'path'
     this.points =  config.points
     
