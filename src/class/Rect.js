@@ -1,10 +1,16 @@
 import Image from './Image.js'
+import { activeSVG, hoverSVG, hoverCorss, dot, cross } from '@/reactive.js'
+
 export default class Rect {
   constructor(config){
     this.type = 'rect'
     this.attrs = config
-
-    this.line = {}
+    // this.on = {
+    //   click: this.click,
+    //   mouseover: this.mouseover,
+    //   mouseleave: this.mouseleave
+    // }
+    this.lines = {}
   }
   getCross(){
     return this.computedPosition().map((item,index) => {
@@ -42,4 +48,22 @@ export default class Rect {
     const rightBottom = [x + width, y + height]
     return [leftTop, top, rightTop, left, right, leftBottom, bottom, rightBottom]
   }
+  // click(){
+  //   dot = this.getDot()
+  //   cross = []
+  // }
+  // mouseover(){
+  //   hoverSVG = this
+  //   cross = this.getCross()
+  //   if(activeSVG) activeSVG.attrs['pointer-events'] = 'none'
+  // }
+  // mouseleave(){
+  //   if(activeSVG) delete activeSVG.attrs['pointer-events']
+  //   setTimeout(()=>{
+  //     if(dotmouseleave) {
+  //       cross = []
+  //       hoverSVG = null
+  //     }
+  //   })
+  // }
 }

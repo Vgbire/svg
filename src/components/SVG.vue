@@ -46,7 +46,7 @@ export default {
     dragDot
   },
   setup(){
-    return { activeSVG, hoverSVG, dot, cross }
+    return { activeSVG, hoverSVG, hoverCorss, dot, cross }
   },
   data(){
     return {
@@ -110,10 +110,11 @@ export default {
     mouseover(svg){
       this.hoverSVG = svg
       this.cross = svg.getCross()
-      if(this.hoverSVG) this.hoverSVG.attrs['pointer-events'] = 'none'
+      if(this.activeSVG) this.activeSVG.attrs['pointer-events'] = 'none'
     },
     mouseleave(){
-      if(this.hoverSVG) delete this.hoverSVG.attrs['pointer-events']
+      if(this.activeSVG) delete this.activeSVG.attrs['pointer-events']
+      // 先让cross事件触发
       setTimeout(()=>{
         if(this.dotmouseleave) {
           this.cross = []
@@ -124,7 +125,7 @@ export default {
     crossMouseover(svg){
       this.dotmouseleave = false
       this.hoverCorss = svg
-      const attrs = svg.attrs
+      let attrs = svg.attrs
       this.dot.push(new Ellipse({
         cx: attrs.x + 4,
         cy: attrs.y + 4,
