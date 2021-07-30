@@ -30,6 +30,5 @@ function update (el, binding) {
   }
 }
 export const dragPath = {
-  mounted: update,
-  updated: update,
+  mounted: update
 }

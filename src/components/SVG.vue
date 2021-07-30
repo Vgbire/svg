@@ -2,6 +2,7 @@
   <button @click="addEllipse">圆</button>
   <button @click="addRect">矩形</button>
   <button @click="addPath">线</button>
+  <button @click="addText">文本</button>
   <div id="svg">
     <svg class="svg-container" @mousedown="clearDot">
       <g v-for="(item, index) in ellipse" :key="index">
@@ -13,8 +14,11 @@
       <g v-for="(item, index) in path" :key="index">
         <path v-bind="item.attrs" @click="click(item)" v-drag-path="item"/>
       </g>
+      <g v-for="(item, index) in text" :key="index">
+        <text v-bind="item.attrs" v-drag-text="item">{{item.text}}</text>
+      </g>
       <g>
-        <g v-for="(item,index) in dot" :key="index+key">
+        <g v-for="(item,index) in dot" :key="index">
           <ellipse v-if="item.type === 'ellipse'" v-bind="item.attrs"></ellipse>
           <image v-else v-bind="item.attrs" v-drag-dot="item"></image>
         </g>
@@ -33,27 +37,30 @@ import { dragEllipse } from '@/directives/dragEllipse.js'
 import { dragRect } from '@/directives/dragRect.js'
 import { dragPath } from '@/directives/dragPath.js'
 import { dragDot } from '@/directives/dragDot.js'
+import { dragText } from '@/directives/dragText.js'
 import Ellipse from '@/class/Ellipse.js'
 import Rect from '@/class/Rect.js'
 import Path from '@/class/Path.js'
-import { activeSVG, hoverSVG, hoverCorss, dot, cross } from '@/reactive.js'
+import Text from '@/class/Text.js'
+import { activeSVG, hoverSVG, preHoverSVG, hoverCorss, dot, cross } from '@/reactive.js'
 
 export default {
   directives: {
     dragEllipse,
     dragRect,
     dragPath,
-    dragDot
+    dragDot,
+    dragText
   },
   setup(){
-    return { activeSVG, hoverSVG, hoverCorss, dot, cross }
+    return { activeSVG, hoverSVG, preHoverSVG, hoverCorss, dot, cross }
   },
   data(){
     return {
       ellipse: [],
       rect: [],
       path: [],
-      key: 0,
+      text: [],
       dotmouseleave: true
     }
   },
@@ -93,6 +100,16 @@ export default {
         'stroke-dasharray': '3,3'
       }))
     },
+    addText(){
+      this.text.push(new Text({
+        x: 150,
+        y: 150,
+        text: 'Text',
+        fill: '#000',
+        cursor: 'move',
+        'font-size': 15
+      }))
+    },
     clearDot(e){
       if(e.target.className.baseVal === 'svg-container') {
         this.activeSVG = null
@@ -105,7 +122,6 @@ export default {
       }
       this.dot = svg.getDot()
       this.cross = []
-      this.key += 100
     },
     mouseover(svg){
       this.hoverSVG = svg
@@ -118,6 +134,7 @@ export default {
       setTimeout(()=>{
         if(this.dotmouseleave) {
           this.cross = []
+          this.preHoverSVG = this.hoverSVG
           this.hoverSVG = null
         }
       })

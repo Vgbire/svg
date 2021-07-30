@@ -27,6 +27,5 @@ function update (el, binding) {
 }
 
 export const dragRect = {
-  mounted: update,
-  updated: update
+  mounted: update
 }

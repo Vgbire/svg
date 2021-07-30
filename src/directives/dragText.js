@@ -2,16 +2,13 @@ function update (el, binding) {
   const value = binding.value
   const attrs = value.attrs
   el.onmousedown = e => {
-    let disX = e.clientX - attrs.cx
-    let disY = e.clientY - attrs.cy
+    let disX = e.clientX - attrs.x
+    let disY = e.clientY - attrs.y
     function mousemove(e){
-      binding.instance.dot = []
-      binding.instance.cross = []
-      attrs.cx = e.clientX - disX
-      attrs.cy = e.clientY - disY
+      attrs.x = e.clientX - disX
+      attrs.y = e.clientY - disY
     }
     function mouseup(){
-      binding.instance.dot = value.getDot()
       document.removeEventListener('mousemove', mousemove)
       document.removeEventListener('mouseup', mouseup)
     }
@@ -21,6 +18,6 @@ function update (el, binding) {
   }
 }
 
-export const dragEllipse = {
+export const dragText = {
   mounted: update
 }

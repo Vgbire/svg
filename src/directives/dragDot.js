@@ -1,4 +1,4 @@
-import { activeSVG, hoverSVG, hoverCorss, dot, cross } from '@/reactive.js'
+import { activeSVG, hoverSVG, preHoverSVG, hoverCorss, dot, cross } from '@/reactive.js'
 
 function update (el, binding) {
   el.onmousedown = e => {
@@ -18,14 +18,16 @@ function update (el, binding) {
 
       const hover = hoverSVG.value
       // if(activeSVG) delete activeSVG.attrs['pointer-events']
+      const id = active.id
       if(hover){
-        const id = active.id
         if(!hover.lines[id]) hover.lines[id] = {}
         const currentLine = hover.lines[id]
         currentLine.id = id
         currentLine.line = active
         currentLine.position = hoverCorss.value.position
         currentLine.pointPosition = value.position
+      }else{
+        if(preHoverSVG.value?.lines[id]) delete preHoverSVG.value.lines[id]
       }
       document.removeEventListener('mousemove', mousemove)
       document.removeEventListener('mouseup', mouseup)
