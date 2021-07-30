@@ -3,6 +3,8 @@ export default class Ellipse {
   constructor(config){
     this.type = 'ellipse'
     this.attrs = config
+
+    this.lines = {}
   }
   getCross(){
     return this.computedPosition().map((item,index) => {
